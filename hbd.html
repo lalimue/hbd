@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Birthday Surprise</title>
+  <style>
+    :root{
+      --bg: #fbeaff;
+      --accent: #ffb6dc;
+      --ribbon: #d28eff;
+      --cake: #ffe3f5;
+      --icing: #ff8ccf;
+      --text: #3d2a54;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      text-align:center;
+      padding:24px;
+    }
+
+    .stage{
+      width:320px;
+      height:420px;
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:visible;
+    }
+
+    .gift {
+  width: 200px;
+  height: 180px;
+  position: relative;
+  cursor: pointer;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.1));
+  transition: transform 0.4s ease;
+}
+.gift:hover {
+  transform: scale(1.05);
+}
+    @keyframes float{
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+   .box {
+  width: 100%;
+  height: 70%;
+  background: linear-gradient(180deg, #ffd8ec, #ffb5d6);
+  border-radius: 22px;
+  position: absolute;
+  bottom: 0;
+  box-shadow: 0 6px 20px rgba(255, 150, 200, 0.3);
+  transition: opacity 600ms ease, transform 600ms ease;
+  overflow: hidden;
+   }
+
+    .ribbon-vert {
+  position: absolute;
+  width: 20px;
+  height: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #fda7dc, #ff89c5);
+  border-radius: 10px;
+  z-index: 3;
+}
+
+.ribbon-hor {
+  position: absolute;
+  height: 18px;
+  width: 120%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(90deg, #fda7dc, #ff89c5);
+  border-radius: 10px;
+  z-index: 3;
+}
+
+    .lid {
+  width: 110%;
+  height: 40%;
+  background: linear-gradient(180deg, #ffe3f5, #ffc7e8);
+  border-radius: 24px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center bottom;
+  transition: transform 700ms cubic-bezier(.2, .9, .2, 1), top 700ms;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+   .bow {
+  width: 70px;
+  height: 34px;
+  position: relative;
+  z-index: 6;
+}
+
+.bow::before, .bow::after {
+  content: "";
+  position: absolute;
+  width: 34px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffeaf7, #ffc3e6);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.6);
+  animation: bowMove 2s ease-in-out infinite alternate;
+}
+
+.bow::before { left: 0; transform: rotate(-25deg); }
+.bow::after { right: 0; left: auto; transform: rotate(25deg); }
+
+@keyframes bowMove {
+  0% { transform: rotate(-25deg) scale(1); }
+  100% { transform: rotate(-30deg) scale(1.05); }
+}
+ .cake {
+  width: 160px; /* عدلي الحجم اللي يناسب صورتك */
+  height: 120px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  background: url('https://i.postimg.cc/4yLq6ZZZ/IMG-5181.png') no-repeat center/contain; /* ← حطي رابط الصورة هنا */
+  background-size: contain;
+  border-radius: 0; /* خليه 0 لو صورتك مو دائرية */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  opacity: 0;
+  transition: opacity 600ms ease, transform 600ms ease;
+  z-index: 6;
+}
+    
+
+
+    
+.gift.opened .lid {
+  opacity:0; /* يختفي */
+  transform: translateX(-50%) rotateX(65deg) translateY(-20px);
+}
+
+    @keyframes flame{
+      0% { transform: translateY(0) scale(1); opacity:1; }
+      50% { transform: translateY(-2px) scale(0.95); opacity:0.9; }
+      100% { transform: translateY(0) scale(1); opacity:1; }
+    }
+
+    /* النجوم */
+    .stars {
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+      z-index:7;
+    }
+
+    .star {
+      position:absolute;
+      width:6px;
+      height:6px;
+      background: radial-gradient(circle, #fff, transparent);
+      border-radius:50%;
+      opacity:0;
+      animation: sparkle 1.5s ease-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% { opacity:1; transform:scale(0.5) translate(0,0); }
+      50% { opacity:1; transform:scale(1) translate(var(--x), var(--y)); }
+      100% { opacity:0; transform:scale(0.3) translate(var(--x), var(--y)); }
+    }
+
+    .gift.opened .lid{
+      transform: translateX(-50%) rotateX(65deg) translateY(-20px);
+      top: -10%;
+    }
+
+    .gift.opened .cake{
+      opacity:1;
+      transform:translate(-50%, -30px) scale(1);
+      z-index:6;
+    }
+
+    .gift.opened .box {
+      opacity:0;
+      transform: translateY(40px) scale(0.9);
+    }
+
+    .message {
+      position:absolute;
+      bottom:-12%;
+      left:50%;
+      transform:translateX(-50%);
+      text-align:center;
+      opacity:0;
+      transition: opacity 600ms ease 250ms, transform 600ms ease 250ms;
+    }
+
+    .message.visible{
+      opacity:1;
+      transform:translateX(-50%) translateY(-8px);
+    }
+
+    .message h1{
+      margin:6px 0 0;
+      font-size:22px;
+      color:var(--text);
+    }
+
+    .message p{
+      margin:8px 0 0;
+      font-size:14px;
+      opacity:0.9;
+    }
+
+    .hint{
+      font-family: 'Comic Neue', cursive;
+      font-weight: bold;
+      font-weight: 700;
+      position:absolute;
+      top:8px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:12px;
+      opacity:0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="stage">
+      <div class="hint">Tap the gift 
+      <img src= "https://i.postimg.cc/yx4tnnSH/IMG-5200.png" width="30" length="30" </div>
+<br> <br> <br>
+      <div class="gift" id="giftBtn">
+        <div class="lid">
+          <div class="bow"></div>
+        </div>
+
+        <div class="cake" id="cake">
+          <div class="icing"></div>
+          <div class="candles">
+            <div class="candle"></div>
+            <div class="candle"></div>
+            <div class="candle"></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="ribbon-vert"></div>
+          <div class="ribbon-hor"></div>
+        </div>
+      </div>
+<br><br> <br><br><br><br><br><br><br><br>
+      <div class="message" id="message">
+        <h1> Happy Birthday Miral 💕</h1>
+        <p>Wishing you the sweetest year ever!</p>
+      </div>
+
+      <div class="stars" id="stars"></div>
+    </div>
+  </div>
+
+  <script>
+    const gift = document.getElementById('giftBtn');
+    const message = document.getElementById('message');
+    const stars = document.getElementById('stars');
+    let opened = false;
+
+    function openGift(){
+      if(opened) return;
+      opened = true;
+      gift.classList.add('opened');
+      gift.style.animation = 'none';
+
+      // نجوم تطير
+      for(let i=0;i<20;i++){
+        const star = document.createElement('div');
+        star.className = 'star';
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 40 + Math.random() * 60;
+        const x = Math.cos(angle) * distance + 'px';
+        const y = Math.sin(angle) * distance + 'px';
+        star.style.setProperty('--x', x);
+        star.style.setProperty('--y', y);
+        star.style.animationDelay = (Math.random() * 0.4)+'s';
+        stars.appendChild(star);
+        setTimeout(()=>star.remove(),1500);
+      }
+
+      setTimeout(()=> {
+        message.classList.add('visible');
+      }, 600);
+    }
+
+    gift.addEventListener('click', openGift);
+  </script>
+</body>
+</html>
